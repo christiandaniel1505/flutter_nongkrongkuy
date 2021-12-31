@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_nongkrongkuy/pages/register/register.dart';
 import 'package:flutter_nongkrongkuy/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,14 @@ class _LoginMainState extends State<LoginMain> {
                     style: TextStyle(color: Color(0xFFc79c60), fontSize: 20)),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 5),
+                child: Image(
+                  width: 250,
+                  image: AssetImage('images/light.png'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
                 child: Image(
                   width: 250,
                   image: AssetImage('images/nongkrong.png'),
@@ -67,7 +75,8 @@ class _LoginMainState extends State<LoginMain> {
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: TextFormField(
                                 controller: emailController,
-                                cursorColor: Color(0xFF282726),
+                                keyboardType: TextInputType.emailAddress,
+                                cursorColor: Color(0xFF050404),
                                 decoration: InputDecoration(
                                   labelText: 'Email',
                                   labelStyle: TextStyle(
@@ -136,8 +145,7 @@ class _LoginMainState extends State<LoginMain> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(
                             _errorMessage,
                             style: TextStyle(color: Colors.red),
@@ -228,21 +236,29 @@ class _LoginMainState extends State<LoginMain> {
                     });
                   }
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 20, bottom: 5, right: 20, left: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE4E4E4),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 5, bottom: 5, left: 15, right: 15),
-                      child: Text(
-                        "Register",
-                        style:
-                            TextStyle(color: Color(0xFF1C1313), fontSize: 20),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return RegisterMain();
+                    }));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, bottom: 5, right: 20, left: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE4E4E4),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5, bottom: 5, left: 15, right: 15),
+                        child: Text(
+                          "Register",
+                          style:
+                              TextStyle(color: Color(0xFF1C1313), fontSize: 20),
+                        ),
                       ),
                     ),
                   ),
