@@ -26,7 +26,7 @@ class _HomeMainState extends State<HomeMain> {
   }
 
   void getUser() async {
-    final String uri = "https://stulish-rest-api.herokuapp.com/api/v1/user";
+    final String uri = "https://api-nongkrongkuy.herokuapp.com/api/v1/user";
     String? token =
         await Provider.of<AuthProvider>(context, listen: false).getToken();
     http.Response result = await http.get(Uri.parse(uri), headers: {

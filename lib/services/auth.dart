@@ -13,7 +13,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> login(String email, String password) async {
     final String uri =
-        "https://stulish-rest-api.herokuapp.com/api/requestToken";
+        "https://api-nongkrongkuy.herokuapp.com/api/requestToken";
     final response = await http.post(Uri.parse(uri), body: {
       'email': email,
       'password': password,
@@ -27,6 +27,27 @@ class AuthProvider extends ChangeNotifier {
       await saveToken(token);
       _isAuthenticated = true;
       notifyListeners();
+      return true;
+    }
+
+    if (response.statusCode == 422) {
+      return false;
+    }
+
+    return false;
+  }
+
+  Future<bool> register(String email, String password, String name) async {
+    final String uri = "https://api-nongkrongkuy.herokuapp.com/api/register";
+    final response = await http.post(Uri.parse(uri), body: {
+      'email': email,
+      'password': password,
+      'name': name,
+    }, headers: {
+      'Accept': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
       return true;
     }
 
