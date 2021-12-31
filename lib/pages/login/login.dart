@@ -161,20 +161,29 @@ class _LoginMainState extends State<LoginMain> {
                               )
                             : InkWell(
                                 onTap: () async {
-                                  setState(() {
-                                    loading = true;
-                                    _errorMessage = "";
-                                  });
-                                  bool result = await Provider.of<AuthProvider>(
-                                          context,
-                                          listen: false)
-                                      .login(emailController.text,
-                                          passwordController.text);
-                                  if (result == false) {
+                                  if (emailController.text == '' ||
+                                      passwordController.text == '') {
                                     setState(() {
-                                      _errorMessage = 'Email or Password Wrong';
-                                      loading = false;
+                                      _errorMessage =
+                                          "Form not allowed to be null";
                                     });
+                                  } else {
+                                    setState(() {
+                                      loading = true;
+                                      _errorMessage = "";
+                                    });
+                                    bool result =
+                                        await Provider.of<AuthProvider>(context,
+                                                listen: false)
+                                            .login(emailController.text,
+                                                passwordController.text);
+                                    if (result == false) {
+                                      setState(() {
+                                        _errorMessage =
+                                            'Email or Password Wrong';
+                                        loading = false;
+                                      });
+                                    }
                                   }
                                 },
                                 child: Padding(
@@ -223,42 +232,27 @@ class _LoginMainState extends State<LoginMain> {
                 ),
               ),
               InkWell(
-                onTap: () async {
-                  setState(() {
-                    _errorMessage = "";
-                  });
-                  bool result =
-                      await Provider.of<AuthProvider>(context, listen: false)
-                          .login(emailController.text, passwordController.text);
-                  if (result == false) {
-                    setState(() {
-                      _errorMessage = 'Email or Password Wrong';
-                    });
-                  }
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return RegisterMain();
+                  }));
                 },
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return RegisterMain();
-                    }));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, bottom: 5, right: 20, left: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE4E4E4),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 5, bottom: 5, left: 15, right: 15),
-                        child: Text(
-                          "Register",
-                          style:
-                              TextStyle(color: Color(0xFF1C1313), fontSize: 20),
-                        ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 20, bottom: 5, right: 20, left: 20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE4E4E4),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5, bottom: 5, left: 15, right: 15),
+                      child: Text(
+                        "Register",
+                        style:
+                            TextStyle(color: Color(0xFF1C1313), fontSize: 20),
                       ),
                     ),
                   ),

@@ -237,10 +237,15 @@ class _RegisterMainState extends State<RegisterMain> {
                                                 passwordController.text,
                                                 nameController.text);
                                     if (result == true) {
-                                      Navigator.push(context, MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                        return LoginMain();
-                                      }));
+                                      bool login =
+                                          await Provider.of<AuthProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .login(emailController.text,
+                                                  passwordController.text);
+                                      if (login == true) {
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   }
                                 },
