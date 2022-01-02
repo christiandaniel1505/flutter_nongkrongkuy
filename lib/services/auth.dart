@@ -59,6 +59,28 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> updateProfile(int id, String password, String name) async {
+    final String uri =
+        "https://api-nongkrongkuy.herokuapp.com/api/updateProfile";
+    final response = await http.post(Uri.parse(uri), body: {
+      'id': id.toString(),
+      'password': password,
+      'name': name,
+    }, headers: {
+      'Accept': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    if (response.statusCode == 422) {
+      return false;
+    }
+
+    return false;
+  }
+
   getDeviceId() async {
     final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
     try {

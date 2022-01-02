@@ -29,7 +29,13 @@ class _HomeMainState extends State<HomeMain> {
   String BASE_URL = "https://api-nongkrongkuy.herokuapp.com/";
   int indexCafe = 0;
   int _currentIndex = 0;
+  String _errorMessage = "";
   PageController _pageController = new PageController();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+  bool loading = false;
+  String userToken = "";
 
   Future<void> getAllCafe() async {
     final String uri =
@@ -95,6 +101,9 @@ class _HomeMainState extends State<HomeMain> {
       var users = User.toString(jsonResponse);
       setState(() {
         user = users;
+        userToken = token!;
+        emailController.text = user.email;
+        nameController.text = user.name;
       });
     }
   }
@@ -432,8 +441,207 @@ class _HomeMainState extends State<HomeMain> {
                 ),
               ),
             ),
-            Container(
-              color: Colors.red,
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF282726),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50, left: 12),
+                          child: Image(
+                            width: 200,
+                            image: AssetImage('images/nongkrong.png'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, top: 10),
+                          child: Image(
+                            image: AssetImage('images/table-set.png'),
+                            width: 350,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, right: 20, left: 20),
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: TextFormField(
+                          enabled: false,
+                          controller: emailController,
+                          cursorColor: Color(0xFF282726),
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0xFFE4E4E4),
+                            labelStyle: TextStyle(
+                              color: Color(0xFF282726),
+                            ),
+                            hintStyle: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.redAccent,
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.teal,
+                              ),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.email,
+                              color: Color(0xFF282726),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF282726), width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, right: 20, left: 20),
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: TextFormField(
+                          controller: nameController,
+                          cursorColor: Color(0xFF282726),
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            labelStyle: TextStyle(
+                              color: Color(0xFF282726),
+                            ),
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.redAccent,
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.teal,
+                              ),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.account_box,
+                              color: Color(0xFF282726),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF282726), width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, right: 20, left: 20),
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: TextFormField(
+                          controller: passwordController,
+                          cursorColor: Color(0xFF282726),
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: TextStyle(
+                              color: Color(0xFF282726),
+                            ),
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.redAccent,
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.teal,
+                              ),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.vpn_key,
+                              color: Color(0xFF282726),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color(0xFF282726), width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  loading == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 55),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: Color(0xFF1C1313),
+                          )),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              bool result = await Provider.of<AuthProvider>(
+                                      context,
+                                      listen: false)
+                                  .updateProfile(
+                                      user.id,
+                                      passwordController.text,
+                                      nameController.text);
+                              if (result == true) {
+                                setState(() {
+                                  loading = false;
+                                  user.name = nameController.text;
+                                });
+                                _showToast(context);
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 10, left: 10, right: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFC79C60),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text('Update Profil',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                        ),
+                  InkWell(
+                    onTap: () {
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .logout();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          top: 10, left: 10, right: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF282726),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child:
+                          Text('Logout', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -464,12 +672,12 @@ class _HomeMainState extends State<HomeMain> {
     );
   }
 
-  _launchURL() async {
-    const url = 'https://google.com';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Update Profile Berhasil'),
+      ),
+    );
   }
 }
