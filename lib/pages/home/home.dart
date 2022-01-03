@@ -266,7 +266,8 @@ class _HomeMainState extends State<HomeMain> {
                                         onTap: () {
                                           MaterialPageRoute route =
                                               MaterialPageRoute(
-                                                  builder: (_) => MenuMain());
+                                                  builder: (_) => MenuMain(
+                                                      cafe_id: item.id));
                                           Navigator.push(context, route);
                                         },
                                       ),
@@ -374,8 +375,10 @@ class _HomeMainState extends State<HomeMain> {
                                                   onTap: () {
                                                     MaterialPageRoute route =
                                                         MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                MenuMain());
+                                                            builder: (_) => MenuMain(
+                                                                cafe_id: cafes[
+                                                                        indexCafe]
+                                                                    .id));
                                                     Navigator.push(
                                                         context, route);
                                                   },
